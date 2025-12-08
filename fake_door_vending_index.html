@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fake-door: Máquina vending - Comida Saludable</title>
+  <!-- Reemplaza G-XXXXXXX con tu Measurement ID de GA4 -->
+  <!-- Si no quieres usar Google Analytics, borra el script de gtag y la llamada gtag('event',...) en script.js -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);} 
+    gtag('js', new Date());
+    gtag('config', 'G-XXXXXXX');
+  </script>
+  <style>
+    :root{--bg:#f7f7f7;--accent:#2b8a7a}
+    body{font-family:Inter, Arial, sans-serif;background:var(--bg);margin:0;padding:20px;display:flex;justify-content:center}
+    .card{width:960px;max-width:96vw;background:white;border-radius:12px;box-shadow:0 8px 30px rgba(0,0,0,0.08);overflow:hidden}
+    .top{display:flex;gap:20px;padding:24px}
+    .vending{position:relative;flex:1;min-height:540px;background:#111;border-radius:8px;overflow:hidden}
+    .vending img{width:100%;height:100%;object-fit:cover;display:block}
+    /* overlay grid of 10 buttons positioned roughly like a vending machine */
+    .buttons{position:absolute;right:8px;top:16px;display:grid;grid-template-columns:1fr;gap:12px;padding:12px}
+    .btn{appearance:none;border:2px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.06);color:white;padding:10px 14px;border-radius:8px;cursor:pointer;font-weight:600}
+    .controls{width:360px;padding:24px}
+    .product{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px dashed #eee}
+    .modal{position:fixed;left:0;right:0;top:0;bottom:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);visibility:hidden;opacity:0;transition:all .18s}
+    .modal.show{visibility:visible;opacity:1}
+    .modal .panel{background:white;padding:18px 22px;border-radius:10px;min-width:280px}
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top">
+      <div class="vending" id="vending">
+        <!-- Pon aquí la imagen de tu máquina vending. Reemplaza vending.jpg por tu imagen en el mismo directorio. -->
+        <img src="vending.jpg" alt="Máquina vending de comida saludable" id="vending-img">
+
+        <div class="buttons" id="buttons">
+          <!-- Los 10 botones. Cambia data-id/data-name si quieres nombres diferentes -->
+          <button class="btn" data-id="p1" data-name="Bowl energético">P1</button>
+          <button class="btn" data-id="p2" data-name="Ensalada quinoa">P2</button>
+          <button class="btn" data-id="p3" data-name="Wrap de pollo">P3</button>
+          <button class="btn" data-id="p4" data-name="Snack vegano">P4</button>
+          <button class="btn" data-id="p5" data-name="Smoothie verde">P5</button>
+          <button class="btn" data-id="p6" data-name="Yogurt con fruta">P6</button>
+          <button class="btn" data-id="p7" data-name="Barra proteica">P7</button>
+          <button class="btn" data-id="p8" data-name="Ensalada de frutas">P8</button>
+          <button class="btn" data-id="p9" data-name="Sopa ligera">P9</button>
+          <button class="btn" data-id="p10" data-name="Bebida isotónica">P10</button>
+        </div>
+      </div>
+
+      <div class="controls">
+        <h2>Fake-door test: Máquina vending - Comida saludable</h2>
+        <p>Objetivo: medir intención de compra al pulsar un "producto". Esta página simula la máquina. Cada vez que alguien pulsa un botón se registra un evento (Google Analytics). Si no configuras Analytics, los clicks se guardan localmente como fallback.</p>
+        <h3>Registros recientes (local)</h3>
+        <div id="logList">— aún no hay clicks —</div>
+        <hr>
+        <p style="font-size:13px;color:#666">Instrucciones rápidas: 1) sube este archivo y la imagen vending.jpg a un hosting (GitHub Pages o Netlify). 2) reemplaza G-XXXXXXX por tu Measurement ID de GA4 para medir clicks en Analytics. 3) comparte la URL y revisa eventos en tiempo real.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal" id="modal"><div class="panel"><div id="modalText">Gracias — estamos midiendo interés</div><div style="text-align:right;margin-top:12px"><button onclick="closeModal()">Cerrar</button></div></div></div>
+
+  <script>
+    // código simple para manejar clicks, enviar evento a GA4 y guardar fallback local
+    const buttons = document.querySelectorAll('.btn');
+    const logList = document.getElementById('logList');
+    const modal = document.getElementById('modal');
+    const modalText = document.getElementById('modalText');
+
+    function showModal(text){ modalText.textContent = text; modal.classList.add('show'); }
+    function closeModal(){ modal.classList.remove('show'); }
+
+    function addLocalLog(entry){
+      const logs = JSON.parse(localStorage.getItem('vendingLogs')||'[]');
+      logs.unshift(entry);
+      localStorage.setItem('vendingLogs', JSON.stringify(logs.slice(0,200)));
+      renderLogs();
+    }
+    function renderLogs(){
+      const logs = JSON.parse(localStorage.getItem('vendingLogs')||'[]');
+      if(!logs.length) return logList.innerHTML = '— aún no hay clicks —';
+      logList.innerHTML = logs.slice(0,10).map(l=>`<div class="product"><div>${new Date(l.time).toLocaleString()}</div><div>${l.name} (${l.id})</div></div>`).join('');
+    }
+
+    buttons.forEach(btn=>btn.addEventListener('click', async ()=>{
+      const id = btn.dataset.id;
+      const name = btn.dataset.name;
+      const time = Date.now();
+
+      // 1) Evento a Google Analytics (si gtag está presente)
+      try{
+        if(typeof gtag === 'function'){
+          gtag('event','select_content',{
+            content_type: 'vending_button',
+            item_id: id,
+            item_name: name
+          });
+        }
+      }catch(e){console.warn('gtag error',e)}
+
+      // 2) Fallback local
+      addLocalLog({id,name,time});
+
+      // 3) (Opcional) enviar a un webhook externo: descomenta y pon tu endpoint
+      /*
+      try{
+        await fetch('https://example.com/your-webhook',{
+          method:'POST',headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({id,name,time,source:location.href})
+        });
+      }catch(e){console.warn('webhook fail',e)}
+      */
+
+      // 4) Feedback UI
+      showModal('Gracias — registramos tu interés en "'+name+'".');
+    }));
+
+    // render inicial
+    renderLogs();
+  </script>
+</body>
+</html>

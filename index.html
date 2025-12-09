@@ -1,177 +1,159 @@
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vending Saludable - Fake Door Test</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Desprocesa - Vending Saludable</title>
 
-    <!-- Google Analytics (GA4) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-YJQ5YKDTDK"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', 'G-YJQ5YKDTDK');
-    </script>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-YJQ5YKDTDK"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-YJQ5YKDTDK');
+</script>
 
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: Arial, sans-serif;
+<style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-image: url('vending.jpg');
+        background-size: cover;
+        background-position: center;
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+    }
 
-            /* Fondo con la imagen de la vending */
-            background-image: url('vending.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-        }
+    /* Panel superior izquierdo */
+    .header {
+        position: absolute;
+        top: 20px;
+        left: 20px;
+        width: 380px;
+        background: rgba(255, 255, 255, 0.85);
+        padding: 15px;
+        border-radius: 15px;
+        display: flex;
+        gap: 10px;
+    }
 
-        .overlay {
-            background: rgba(255, 255, 255, 0.7);
-            min-height: 100vh;
-            padding: 20px;
-        }
+    .header img {
+        width: 70px;
+        height: 70px;
+        border-radius: 10px;
+        object-fit: cover;
+    }
 
-        .top-section {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 15px;
-            border-radius: 10px;
-            width: fit-content;
-        }
+    .header-text {
+        font-size: 14px;
+        color: #222;
+        font-weight: bold;
+    }
 
-        .top-section img {
-            width: 80px;
-            height: auto;
-            border-radius: 10px;
-        }
+    /* Contenedor de botones */
+    .button-container {
+        position: absolute;
+        top: 150px;
+        right: 40px;
+        width: 330px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
 
-        .top-text {
-            max-width: 350px;
-            font-size: 15px;
-            font-weight: bold;
-        }
+    .producto-btn {
+        width: 150px;
+        height: 150px;
+        border-radius: 15px;
+        background-size: cover;
+        background-position: center;
+        border: 3px solid white;
+        cursor: pointer;
+        transition: transform 0.15s;
+    }
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 25px;
-            max-width: 500px;
-            margin: auto;
-        }
+    .producto-btn:hover {
+        transform: scale(1.08);
+    }
 
-        .item {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 15px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-        }
+    /* Panel de gasto */
+    #totalDisplay {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.85);
+        padding: 15px 20px;
+        border-radius: 15px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #222;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
 
-        .item img {
-            width: 100%;
-            border-radius: 10px;
-        }
-
-        .button {
-            margin-top: 10px;
-            padding: 12px;
-            background: #4CAF50;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-        }
-
-        .button:hover {
-            background: #45a049;
-        }
-    </style>
-
-    <script>
-        function registrarClick(producto) {
-            gtag('event', 'click_producto', {
-                'producto': producto
-            });
-            alert("Gracias por tu interés en " + producto + ". Muy pronto estará disponible.");
-        }
-    </script>
+</style>
 </head>
 
 <body>
-<div class="overlay">
 
-    <!-- LOGO + DESCRIPCIÓN -->
-    <div class="top-section">
-        <img src="logo.jpg" alt="Logo Desprocesa">
-        <div class="top-text">
-            Bienvenidos a <b>Desprocesate Virtual Vending Machine</b>¿Qué productos saludables te gustaría comprar el día de hoy? Solo toca el botón verde del producto que deseas.
-        </div>
+<!-- Panel superior -->
+<div class="header">
+    <img src="logo.jpg" alt="Logo Desprocesa">
+    <div class="header-text">
+        Bienvenidos a Desprocesate.<br>
+       ¿Qué productos saludables te gustaría comprar el día de hoy? Solo toca el boton verde del producto que deseas.
     </div>
-
-    <!-- GRID DE PRODUCTOS -->
-    <div class="grid">
-
-        <div class="item">
-            <img src="img/zumo.png" alt="Zumo de fruta">
-            <button class="button" onclick="registrarClick('Zumo de fruta natural')">Zumo de fruta natural</button>
-        </div>
-
-        <div class="item">
-            <img src="img/frutos_secos.png" alt="Snack frutos secos">
-            <button class="button" onclick="registrarClick('Snack de frutos secos')">Snack de frutos secos</button>
-        </div>
-
-        <div class="item">
-            <img src="img/fresa_deshidratada.png" alt="Fresa deshidratada">
-            <button class="button" onclick="registrarClick('Fruta deshidratada fresa')">Fruta deshidratada (fresa)</button>
-        </div>
-
-        <div class="item">
-            <img src="img/mango_deshidratado.png" alt="Mango deshidratado">
-            <button class="button" onclick="registrarClick('Fruta deshidratada mango')">Fruta deshidratada (mango)</button>
-        </div>
-
-        <div class="item">
-            <img src="img/barra_cereal.png" alt="Barra de cereal">
-            <button class="button" onclick="registrarClick('Barra de cereal')">Barra de cereal</button>
-        </div>
-
-        <div class="item">
-            <img src="img/galletas_integrales.png" alt="Galletas integrales">
-            <button class="button" onclick="registrarClick('Galletas integrales')">Galletas integrales</button>
-        </div>
-
-        <div class="item">
-            <img src="img/mix_semillas.png" alt="Mix de semillas">
-            <button class="button" onclick="registrarClick('Mix de semillas')">Mix de semillas</button>
-        </div>
-
-        <div class="item">
-            <img src="img/yogur.png" alt="Yogur natural">
-            <button class="button" onclick="registrarClick('Yogur natural')">Yogur natural</button>
-        </div>
-
-        <div class="item">
-            <img src="img/palitos_verduras.png" alt="Palitos de verduras">
-            <button class="button" onclick="registrarClick('Palitos de verduras')">Palitos de verduras</button>
-        </div>
-
-        <div class="item">
-            <img src="img/frutas_mix.png" alt="Frutas deshidratadas mix">
-            <button class="button" onclick="registrarClick('Frutas deshidratadas mix')">Frutas deshidratadas mix</button>
-        </div>
-
-    </div>
-
 </div>
+
+<!-- Botones -->
+<div class="button-container">
+    <div class="producto-btn" onclick="registrarClick('p1')" style="background-image: url('img/zumo.png');"></div>
+    <div class="producto-btn" onclick="registrarClick('p2')" style="background-image: url('img/frutos_secos.png');"></div>
+    <div class="producto-btn" onclick="registrarClick('p3')" style="background-image: url('img/fresa_deshidratada.png');"></div>
+    <div class="producto-btn" onclick="registrarClick('p4')" style="background-image: url('img/mango_deshidratado.png');"></div>
+    <div class="producto-btn" onclick="registrarClick('p5')" style="background-image: url('img/barra_cereal.png');"></div>
+    <div class="producto-btn" onclick="registrarClick('p6')" style="background-image: url('img/galletas_integrales.png');"></div>
+    <div class="producto-btn" onclick="registrarClick('p7')" style="background-image: url('img/mix_semillas.png');"></div>
+    <div class="producto-btn" onclick="registrarClick('p8')" style="background-image: url('img/yogur.png');"></div>
+    <div class="producto-btn" onclick="registrarClick('p9')" style="background-image: url('img/palitos_verduras.png');"></div>
+    <div class="producto-btn" onclick="registrarClick('p10')" style="background-image: url('img/mix_semillas.png');"></div>
+</div>
+
+<!-- Panel de gasto -->
+<div id="totalDisplay">Total estimado: $0 COP</div>
+
+<!-- Lógica de precios y contador -->
+<script>
+    const precios = {
+        p1: 8000,   // Zumo natural
+        p2: 5000,   // Frutos secos
+        p3: 7000,   // Fresa deshidratada
+        p4: 7000,   // Mango deshidratado
+        p5: 5500,   // Barra integral
+        p6: 5000,   // Galletas integrales
+        p7: 9000,   // Mix de semillas
+        p8: 6500,   // Yogur natural
+        p9: 5000,   // Palitos de verduras
+        p10: 8000   // Fruta deshidratada mix
+    };
+
+    let totalGastado = 0;
+
+    function registrarClick(productId) {
+        totalGastado += precios[productId];
+
+        document.getElementById("totalDisplay").innerText =
+            `Total estimado: $${totalGastado.toLocaleString('es-CO')} COP`;
+
+        // Enviar evento a GA4
+        gtag('event', 'product_click', {
+            product_id: productId,
+            product_price: precios[productId],
+            total_session_spent: totalGastado
+        });
+    }
+</script>
+
 </body>
 </html>
-

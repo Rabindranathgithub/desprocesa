@@ -124,18 +124,18 @@
 
         function registrarClick(producto) {
 
-            // Sumar al contador
-            total += precios[producto];
-            document.getElementById("totalDisplay").innerText =
-                `Total estimado: $${total.toLocaleString('es-CO')} COP`;
+    // Actualizar total
+    total += precios[producto];
+    document.getElementById("totalDisplay").innerText =
+        `Total estimado: $${total.toLocaleString('es-CO')} COP`;
 
-            // Enviar evento a Google Analytics
-            gtag('event', 'click_producto', {
-                producto: producto,
-                precio: precios[producto],
-                total_acumulado: total
-            });
-        }
+    // Evento correcto para GA4
+    gtag('event', 'product_click', {
+        product_id: producto,
+        product_price: precios[producto],
+        total_session_spent: total
+    });
+}
     </script>
 </head>
 
